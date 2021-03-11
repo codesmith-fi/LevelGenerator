@@ -4,11 +4,6 @@
 
 namespace Generator
 {
-	/*
-	typedef std::vector<Tile> TileVector;
-	typedef std::vector<std::shared_ptr<Tile>> TileVector;
-
-	*/
 	Level::Level(int width, int height) : iWidth(width), iHeight(height)
 	{
 		// construct an empty tilemap, vector of vectors of Tile

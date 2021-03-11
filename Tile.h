@@ -1,6 +1,9 @@
 #ifndef _GENERATOR_TILE_H_DEFINED
 #define _GENERATOR_TILE_H_DEFINED
 
+#include <memory>
+#include "Room.h"
+
 namespace Generator
 {
 	/**
@@ -15,14 +18,20 @@ namespace Generator
 	public:
 		Tile() : Tile(false, 0, 0, 0) { }
 		Tile(bool isOpen) : Tile(isOpen, 0, 0, 0) { }
-		Tile(bool isOpen, int traps, int x, int y) : iIsOpen(isOpen), iTrapCount(traps), iX(x), iY(y) { }
+		Tile(bool isOpen, int traps, int x, int y) 
+			: iIsOpen(isOpen), iTrapCount(traps), iX(x), iY(y), iRoomPtr(NULL) { }
 		virtual ~Tile() { }
 		Tile& operator=(const Tile& other);
 
 	public: // Methods
-		bool Open() { return iIsOpen; }
+		void setParentRoom(std::shared_ptr<Room> room_ptr);
+		std::shared_ptr<Room> parentRoom();
+		bool isOpen();
+		bool isWall();
+		bool isDoor();
 
 	public: // Properties
+		std::shared_ptr<Room> iRoomPtr;
 		bool iIsOpen;
 		int iTrapCount;
 		int iX;
