@@ -1,0 +1,12 @@
+.vs/
+bin/
+obj/
+build/
+Debug/
+Release/
+*.dblite
+*.sdf
+*.opensdf
+*.v12.suo
+LevelGenerator.vcxproj.filters
+LevelGenerator.vcxproj.user
