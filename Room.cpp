@@ -2,6 +2,7 @@
 #include <exception>
 #include <stdexcept>
 #include "Room.h"
+#include "DebugLogger.h"
 
 namespace Generator
 {
@@ -42,25 +43,25 @@ namespace Generator
 		switch (a) {
 			case Door::RoomDoorDirection::DOWN:
 			{
-				new_door_ptr->iY = iTlY;
+				new_door_ptr->iY = iBrY;
 				new_door_ptr->iX = iTlX + (rand() % ((iBrX - iTlX) - 2)) + 1;
 				break;
 			}
 			case Door::RoomDoorDirection::UP:
 			{
-				new_door_ptr->iY = iBrY;
+				new_door_ptr->iY = iTlY;
 				new_door_ptr->iX = iTlX + (rand() % ((iBrX - iTlX) - 2)) + 1;
 				break;
 			}
 			case Door::RoomDoorDirection::LEFT:
 			{
-				new_door_ptr->iX = iBrX;
+				new_door_ptr->iX = iTlX;
 				new_door_ptr->iY = iTlY + (rand() % ((iBrY - iTlY) - 2)) + 1;
 				break;
 			}
 			case Door::RoomDoorDirection::RIGHT:
 			{
-				new_door_ptr->iX = iTlX;
+				new_door_ptr->iX = iBrX;
 				new_door_ptr->iY = iTlY + (rand() % ((iBrY - iTlY) - 2)) + 1;
 				break;
 			}
@@ -71,6 +72,8 @@ namespace Generator
 				break;
 			}
 		}
+		new_door_ptr->iDirection = a;
+		iDoors.push_back(new_door_ptr);
 		return new_door_ptr;
 	}
 

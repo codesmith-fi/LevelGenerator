@@ -83,6 +83,11 @@ namespace Generator
 			// carve area
 			carveArea(room, x, y, w, h);
 			room->iValid = true;
+			if (iRooms.size()>0) {
+				std::shared_ptr<Room> previousRoom = iRooms.at(iRooms.size()-1);
+				std::shared_ptr<Door> door_ptr = room->addTowardsRoom(*previousRoom);
+				iTileMap.at(door_ptr->iY).at(door_ptr->iX)->iDoorPtr = door_ptr;
+			}
 			iRooms.push_back(room);
 		}
 		return room;
