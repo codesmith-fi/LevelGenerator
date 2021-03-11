@@ -1,3 +1,15 @@
+/**
+ * Level Gerator module
+ *
+ * Author: Erno Pakarinen
+ * Email: erpakari@gmail.com
+ * Date: March 11, 2021
+ *
+ * If you use this piece of code, honk me with an email. Free to use but the
+ * origins should be mentioned in end product if you use this.
+ *
+ * MIT License
+ */
 #include <iostream>
 #include <memory>
 #include <time.h>
@@ -7,13 +19,28 @@ using namespace Generator;
 
 int main(int argc, char** argv)
 {
-	srand(((unsigned int)time(NULL)));
+	const int KLevelWidth = 80;
+	const int KLevelHeight = 30;
+	const int KNumberOfRooms = 12;
+	const int KRoomMinWidth = 6;
+	const int KRoomMinHeight = 6;
+	const int KRoomMaxWidth = 25;
+	const int KRoomMaxHeight = 25;
+	const int KRetryCount = 10;
 
-	std::shared_ptr<Level> level = std::make_shared<Level>(Level(100,40));
+	srand(((unsigned int)time(NULL)));
+	std::shared_ptr<Level> level = std::make_shared<Level>(Level(KLevelWidth, KLevelWidth));
 
 	std::cout << "Level width=" << level->width() << " height=" << level->height() << std::endl;
+	std::cout << "Generating up to " << KNumberOfRooms << " rooms with size between ("
+		<< KRoomMinWidth << "-" << KRoomMaxWidth << ","
+		<< KRoomMaxWidth << "-" << KRoomMaxHeight << ")" << std::endl << std::endl;
 
-	level->createRooms(15, 6, 6, 15, 15, 10);
+	level->createRooms(
+		KNumberOfRooms, 
+		KRoomMinWidth, KRoomMinHeight, 
+		KRoomMaxWidth, KRoomMaxHeight, 
+		KRetryCount );
 
 	for (int y = 0; y < level->height(); ++y) {
 		for (int x = 0; x < level->width(); ++x) {

@@ -1,3 +1,15 @@
+/**
+ * Level Gerator module
+ *
+ * Author: Erno Pakarinen
+ * Email: erpakari@gmail.com
+ * Date: March 11, 2021
+ *
+ * If you use this piece of code, honk me with an email. Free to use but the
+ * origins should be mentioned in end product if you use this.
+ *
+ * MIT License
+ */
 #include <exception>
 #include <stdexcept>
 #include <stdlib.h>
@@ -141,7 +153,6 @@ namespace Generator
 				std::shared_ptr<Tile> tile = at(sX, sY);
 				tile->iIsOpen = true;
 				tile->iIsCorridor = true;
-//				&& !target.isInside(sX, sY)
 				sY--;
 			}
 			while (sX != tX) {

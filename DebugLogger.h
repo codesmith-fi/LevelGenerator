@@ -1,9 +1,18 @@
-/*
- * DebugLogger.h
- *
- *  Created on: Nov 18, 2019
- *      Author: erno
- */
+ /**
+  * Level Gerator module
+  * Simple console debug logger
+  * 
+  * Usage:
+  *		LOG_INFO() << "You failed " << 20 << "Times!"
+  *		LOG_WARN() << "You failed " << 20 << "Times!"
+  *		LOG_ERROR() << "You failed " << 20 << "Times!"
+  *
+  * Author: Erno Pakarinen
+  * Email: erpakari@gmail.com
+  * Date: Nov 18, 2019
+  *
+  * MIT License
+  */
 #ifndef DEBUGLOGGER_DEFINED_H
 #define DEBUGLOGGER_DEFINED_H
 
