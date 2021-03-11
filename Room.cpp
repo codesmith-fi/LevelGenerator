@@ -10,7 +10,7 @@ namespace Generator
 	{
 	}
 
-	void Room::addDoor(const Door& door)
+	void Room::addDoor(std::shared_ptr<Door> door)
 	{
 		// Door must be in the room borders but not in the corners
 		// X******X
@@ -18,19 +18,27 @@ namespace Generator
 		// *XXXXXX*   -> X = invalid door places
 		// *XXXXXX*
 		// X******X
-		if( (door.iY == iTlY && (door.iX > iTlX && door.iX < iBrX)) ||
-			(door.iY == iBrY && (door.iX > iTlX && door.iX < iBrX)) ||
-			(door.iX == iTlX && (door.iY > iTlY && door.iY < iBrY)) ||
-			(door.iX == iBrX && (door.iY > iTlY && door.iY < iBrY))) 
+		if( (door->iY == iTlY && (door->iX > iTlX && door->iX < iBrX)) ||
+			(door->iY == iBrY && (door->iX > iTlX && door->iX < iBrX)) ||
+			(door->iX == iTlX && (door->iY > iTlY && door->iY < iBrY)) ||
+			(door->iX == iBrX && (door->iY > iTlY && door->iY < iBrY))) 
 		{
-			std::shared_ptr<Door> door_ptr = std::shared_ptr<Door>(new Door(door));
-			iDoors.push_back(door_ptr);
+			iDoors.push_back(door);
 		}
 	}
 
-	std::shared_ptr<Door> Room::addTowardsRoom(Room& otherRoom)
+	bool Room::isInside(int x, int y) const
 	{
-		
+		return (x >= iTlX && x <= iBrX && y >= iTlY && y <= iBrY) ? true : false;
+	}
+
+	bool Room::isOnEdges(int x, int y) const
+	{
+		return (x == iTlX || x == iBrX || y == iTlY || y == iBrY) ? true : false;
+	}
+
+	std::shared_ptr<Door> Room::addTowardsRoom(Room& otherRoom)
+	{		
 		int x = 0;
 		int y = 0;
 

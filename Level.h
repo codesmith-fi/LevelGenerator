@@ -39,6 +39,7 @@ namespace Generator
 		bool checkArea(int unsigned x, unsigned int y, unsigned int w, unsigned int h);
 		void carveArea(std::shared_ptr<Room> parent, unsigned int x, unsigned int y, 
 			unsigned int w, unsigned int h);
+		void carve_corridor(const Door& origin, const Room& target);
 
 	private: // Data
 		unsigned int iWidth;

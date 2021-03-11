@@ -16,11 +16,14 @@ namespace Generator
 		virtual ~Room() { }
 
 	public:
+		bool isInside(int x, int y) const;
+		bool isOnEdges(int x, int y) const;
+
 		/**
 		 * Add a new door to the room
 		 *
 		 */
-		void addDoor(const Door& door);
+		void addDoor(std::shared_ptr<Door> door);
 
 		/**
 		 * Add a room leading towards the other room given as parameter

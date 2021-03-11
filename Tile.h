@@ -19,7 +19,7 @@ namespace Generator
 		Tile() : Tile(false, 0, 0, 0) { }
 		Tile(bool isOpen) : Tile(isOpen, 0, 0, 0) { }
 		Tile(bool isOpen, int traps, int x, int y) 
-			: iIsOpen(isOpen), iTrapCount(traps), iX(x), iY(y), iRoomPtr(NULL), iDoorPtr(NULL) { }
+			: iIsOpen(isOpen), iTrapCount(traps), iX(x), iY(y), iIsCorridor(0), iRoomPtr(NULL), iDoorPtr(NULL) { }
 		virtual ~Tile() { }
 		Tile& operator=(const Tile& other);
 
@@ -34,6 +34,7 @@ namespace Generator
 		std::shared_ptr<Room> iRoomPtr;
 		std::shared_ptr<Door> iDoorPtr;
 		bool iIsOpen;
+		bool iIsCorridor;
 		int iTrapCount;
 		int iX;
 		int iY;

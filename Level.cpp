@@ -87,6 +87,7 @@ namespace Generator
 				std::shared_ptr<Room> previousRoom = iRooms.at(iRooms.size()-1);
 				std::shared_ptr<Door> door_ptr = room->addTowardsRoom(*previousRoom);
 				iTileMap.at(door_ptr->iY).at(door_ptr->iX)->iDoorPtr = door_ptr;
+				carve_corridor(*door_ptr, *previousRoom);
 			}
 			iRooms.push_back(room);
 		}
@@ -107,6 +108,98 @@ namespace Generator
 				retry++;
 			}
 		}
+	}
+
+	void Level::carve_corridor(const Door& origin, const Room& target)
+	{
+		int sX = origin.iX;
+		int sY = origin.iY;
+		int tX = target.iTlX + (target.iBrX - target.iTlX) / 2;
+		int tY = target.iTlY + (target.iBrY - target.iTlY) / 2;
+
+		int deltaX = 0;
+		if (tX > sX) {
+			deltaX++;
+		}
+		else if(tX < sX) {
+			deltaX--;
+		}
+
+		int deltaY = 0;
+		if (tY > sY) {
+			deltaY++;
+		}
+		else if (tY < sY) {
+			deltaY--;
+		}
+		/**
+		 * TODO: Make a door at the corridor end point
+		 */
+		std::shared_ptr<Tile> tile = at(sX, sY);
+		if (origin.iDirection == Door::RoomDoorDirection::UP) {
+			while (sY > tY) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+//				&& !target.isInside(sX, sY)
+				sY--;
+			}
+			while (sX != tX) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sX+=deltaX;
+			}
+		} else if (origin.iDirection == Door::RoomDoorDirection::DOWN) {
+			while (sY < tY) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sY++;
+			}
+			while (sX != tX) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sX += deltaX;
+			}
+		} else if (origin.iDirection == Door::RoomDoorDirection::LEFT) {
+			while (sX > tX) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sX--;
+			}
+			while (sY != tY) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sY += deltaY;
+			}
+		}
+		else if (origin.iDirection == Door::RoomDoorDirection::RIGHT) {
+			while (sX < tX) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sX++;
+			}
+			while (sY != tY) {
+				std::shared_ptr<Tile> tile = at(sX, sY);
+				tile->iIsOpen = true;
+				tile->iIsCorridor = true;
+				sY += deltaY;
+			}
+		}
+/*
+		if (!tile->isDoor()) {
+			std::shared_ptr<Door> door_ptr = std::shared_ptr<Door>(new Door(sX, sY, true));
+			if (tile->iRoomPtr != NULL) {
+				tile->iRoomPtr->iDoors.push_back(door_ptr);
+				tile->iDoorPtr = door_ptr;
+			}
+		}
+*/
 	}
 
 	bool Level::checkArea(unsigned int x, unsigned int y, 

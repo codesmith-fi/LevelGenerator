@@ -30,16 +30,11 @@ namespace Generator
 		bool wall = false;
 
 		if (iRoomPtr.get() != NULL) {
-			if (iX == iRoomPtr->iTlX || iX == iRoomPtr->iBrX ||
-				iY == iRoomPtr->iTlY || iY == iRoomPtr->iBrY) {
+			if (!iIsCorridor && ( iX == iRoomPtr->iTlX || iX == iRoomPtr->iBrX ||
+				iY == iRoomPtr->iTlY || iY == iRoomPtr->iBrY)) {
 				wall = true;
 			}
 		}
-/*		if (iRoomPtr != NULL) {
-			LOG_INFO() << " BR: (" << iRoomPtr->iBrX << ", " << iRoomPtr->iBrY << ") Check wall at " << iX << "," << iY << ", res = " << wall;
-			
-		}
-		*/
 		return wall;
 	}
 
