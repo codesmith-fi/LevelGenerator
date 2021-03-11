@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	const int KRetryCount = 10;
 
 	srand(((unsigned int)time(NULL)));
-	std::shared_ptr<Level> level = std::make_shared<Level>(Level(KLevelWidth, KLevelWidth));
+	Level* level = new Level(KLevelWidth, KLevelWidth);
 
 	std::cout << "Level width=" << level->width() << " height=" << level->height() << std::endl;
 	std::cout << "Generating up to " << KNumberOfRooms << " rooms with size between ("
@@ -44,16 +44,17 @@ int main(int argc, char** argv)
 
 	for (int y = 0; y < level->height(); ++y) {
 		for (int x = 0; x < level->width(); ++x) {
-			unsigned char out = level->at(x,y)->isOpen() ? ' ' : '*';
-			if(!level->at(x, y)->iIsCorridor) {
-				out = level->at(x, y)->isWall() ? '#' : out;
+			unsigned char out = level->at(x,y).isOpen() ? ' ' : '*';
+			if(!level->at(x, y).iIsCorridor) {
+				out = level->at(x, y).isWall() ? '#' : out;
 			}
-			if (level->at(x, y)->isDoor()) {				
-				out = level->at(x, y)->iDoorPtr->iClosed ?  '+' : '//';
+			if (level->at(x, y).isDoor()) {				
+				out = level->at(x, y).iDoorPtr->iClosed ?  '+' : '//';
 			}
 			std::cout << out;
 		}
 		std::cout << std::endl;
 	}
+	delete level;
 	return 0;
 }

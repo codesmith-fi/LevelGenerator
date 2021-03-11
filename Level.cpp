@@ -18,34 +18,35 @@
 
 namespace Generator
 {
-	Level::Level(unsigned int width, unsigned  int height) : iWidth(width), iHeight(height)
+	Level::Level(unsigned int width, unsigned  int height) : iLevelTileMap(NULL), iWidth(width), iHeight(height)
 	{
 		if (width <= 0 || height <= 0 ) {
 			return;
 		}
 
-		// construct an empty tilemap, vector of vectors of Tile
-		for (unsigned int y = 0; y < height; ++y) {
-			
-			TTileVector line;
-			for (unsigned int x = 0; x < width; ++x) {
-				line.push_back(std::make_shared<Tile>(Tile(false, 0, x, y)));
+		iLevelTileMap = new Tile*[height * width];
+		for(unsigned int y = 0; y < height; ++y) {
+			for(unsigned int x = 0; x < width; ++x) {
+				iLevelTileMap[y * width + x] = new Tile(false, 0, x, y);
 			}
-			iTileMap.push_back(line);
 		}
 	}
 
 	Level::~Level()
 	{
+		for (unsigned int i = 0; i < (iHeight * iWidth); ++i) {
+			delete iLevelTileMap[i];
+		}
+		delete[] iLevelTileMap;
 	}
 
-	std::shared_ptr<Tile> Level::at(unsigned int x, unsigned int y)
+	Tile& Level::at(unsigned int x, unsigned int y)
 	{
 		// Sanity check
 		if (x >= iWidth && y >= iHeight) {
 			throw std::length_error("Invalid level coordinates, out of range");
 		}
-		return iTileMap.at(y).at(x);
+		return *iLevelTileMap[y * iWidth + x];
 	}
 
 	TRoomVector Level::rooms()
@@ -98,7 +99,7 @@ namespace Generator
 			if (iRooms.size()>0) {
 				std::shared_ptr<Room> previousRoom = iRooms.at(iRooms.size()-1);
 				std::shared_ptr<Door> door_ptr = room->addTowardsRoom(*previousRoom);
-				iTileMap.at(door_ptr->iY).at(door_ptr->iX)->iDoorPtr = door_ptr;
+				at(door_ptr->iX, door_ptr->iY).iDoorPtr= door_ptr;
 				carve_corridor(*door_ptr, *previousRoom);
 			}
 			iRooms.push_back(room);
@@ -147,58 +148,57 @@ namespace Generator
 		/**
 		 * TODO: Make a door at the corridor end point
 		 */
-		std::shared_ptr<Tile> tile = at(sX, sY);
 		if (origin.iDirection == Door::RoomDoorDirection::UP) {
 			while (sY > tY) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sY--;
 			}
 			while (sX != tX) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sX+=deltaX;
 			}
 		} else if (origin.iDirection == Door::RoomDoorDirection::DOWN) {
 			while (sY < tY) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sY++;
 			}
 			while (sX != tX) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sX += deltaX;
 			}
 		} else if (origin.iDirection == Door::RoomDoorDirection::LEFT) {
 			while (sX > tX) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sX--;
 			}
 			while (sY != tY) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sY += deltaY;
 			}
 		}
 		else if (origin.iDirection == Door::RoomDoorDirection::RIGHT) {
 			while (sX < tX) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sX++;
 			}
 			while (sY != tY) {
-				std::shared_ptr<Tile> tile = at(sX, sY);
-				tile->iIsOpen = true;
-				tile->iIsCorridor = true;
+				Tile& tile = at(sX, sY);
+				tile.iIsOpen = true;
+				tile.iIsCorridor = true;
 				sY += deltaY;
 			}
 		}
@@ -219,11 +219,11 @@ namespace Generator
 		bool res = true;
 		for (unsigned int iy = y; iy < y+h && res; ++iy) {
 			for (unsigned int ix = x; ix < x+w && res; ++ix) {
-				if (iy >= iTileMap.size() || ix >= iTileMap.at(iy).size()) {
+				if (iy >= iHeight || ix >= iWidth) {
 					res = false;
 					break;
 				}
-				if(iTileMap.at(iy).at(ix)->iIsOpen) {
+				if(at(ix, iy).iIsOpen) {
 					res = false;
 					break;
 				}
@@ -240,9 +240,9 @@ namespace Generator
 	{
 		for(unsigned int iy = y; iy < y+h; ++iy) {
 			for(unsigned int ix = x; ix < x+w; ++ix) {
-				std::shared_ptr<Tile> tile = iTileMap.at(iy).at(ix);
-				tile->iIsOpen = true;
-				tile->iRoomPtr = parent;
+				Tile& tile = at(ix, iy);
+				tile.iIsOpen = true;
+				tile.iRoomPtr = parent;
 			}
 		}
 	}

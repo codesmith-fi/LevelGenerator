@@ -48,8 +48,8 @@ namespace Generator
 		bool iIsOpen;
 		bool iIsCorridor;
 		int iTrapCount;
-		int iX;
-		int iY;
+		unsigned int iX;
+		unsigned int iY;
 	};
 }
 

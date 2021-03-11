@@ -37,7 +37,7 @@ namespace Generator
 	public: // Methods
 		int width() { return iWidth; }
 		int height() { return iHeight; }
-		std::shared_ptr<Tile> at(unsigned int x, unsigned int y);
+		Tile& at(unsigned int x, unsigned int y);
 		std::shared_ptr<Room> addRoom(unsigned int minWidth, unsigned int minHeight, 
 			unsigned int maxWidth, unsigned int maxHeight);
 		std::shared_ptr<Room> addRoomAt(int x, int y, 
@@ -54,9 +54,10 @@ namespace Generator
 		void carve_corridor(const Door& origin, const Room& target);
 
 	private: // Data
+		//std::vector<TTileVector> iTileMap;
+		Tile** iLevelTileMap;
 		unsigned int iWidth;
 		unsigned int iHeight;
-		std::vector<TTileVector> iTileMap;
 		TRoomVector iRooms;
 	};
 }
