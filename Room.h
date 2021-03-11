@@ -11,8 +11,8 @@ namespace Generator
 	{
 	public:
 	public:
-		Room() : Room(0,0,0,0) { }
-		Room(int x1, int y1, int x2, int y2);
+		Room() : Room(0,0,0,0, false) { }
+		Room(int x1, int y1, int x2, int y2, bool valid);
 		virtual ~Room() { }
 
 	public:
@@ -34,6 +34,7 @@ namespace Generator
 		 */
 		Door::RoomDoorDirection get_direction(Room& otherRoom);
 	public: // data
+		bool iValid;
 		int iTlX;
 		int iTlY;
 		int iBrX;

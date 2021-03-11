@@ -146,6 +146,7 @@
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugLogger.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Room.h" />

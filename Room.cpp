@@ -1,4 +1,3 @@
-#include <time.h>
 #include <stdlib.h>
 #include <exception>
 #include <stdexcept>
@@ -6,9 +5,8 @@
 
 namespace Generator
 {
-	Room::Room(int x1, int y1, int x2, int y2) : iTlX(x1), iTlY(y1), iBrX(x2), iBrY(y2)
+	Room::Room(int x1, int y1, int x2, int y2, bool valid) : iTlX(x1), iTlY(y1), iBrX(x2), iBrY(y2), iValid(valid)
 	{
-		srand(((unsigned int)time(NULL)));
 	}
 
 	void Room::addDoor(const Door& door)
