@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandLineParser.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelGenerator.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandLineParser.h" />
     <ClInclude Include="DebugLogger.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Level.h" />

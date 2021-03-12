@@ -14,6 +14,7 @@
 #include <memory>
 #include <time.h>
 #include "Level.h"
+#include "CommandLineParser.h"
 
 using namespace Generator;
 
@@ -28,16 +29,33 @@ int main(int argc, char** argv)
 	const int KRoomMaxHeight = 25;
 	const int KRetryCount = 10;
 
+	int param_width = CommandLineParser::parseInt("-w", argc, argv);
+	int param_height = CommandLineParser::parseInt("-h", argc, argv);
+	int param_rooms = CommandLineParser::parseInt("-c", argc, argv);
+
+	int map_w = param_width;
+	if (!param_width) {
+		map_w = KLevelWidth;
+	}
+	int map_h = param_height;
+	if (!param_height) {
+		map_h = KLevelHeight;
+	}
+	int rooms_c = param_rooms;
+	if (!param_rooms) {
+		rooms_c = KNumberOfRooms;
+	}
+
 	srand(((unsigned int)time(NULL)));
-	Level* level = new Level(KLevelWidth, KLevelWidth);
+	Level* level = new Level(map_w, map_h);
 
 	std::cout << "Level width=" << level->width() << " height=" << level->height() << std::endl;
-	std::cout << "Generating up to " << KNumberOfRooms << " rooms with size between ("
+	std::cout << "Generating up to " << rooms_c << " rooms with size between ("
 		<< KRoomMinWidth << "-" << KRoomMaxWidth << ","
 		<< KRoomMaxWidth << "-" << KRoomMaxHeight << ")" << std::endl << std::endl;
 
 	level->createRooms(
-		KNumberOfRooms, 
+		rooms_c, 
 		KRoomMinWidth, KRoomMinHeight, 
 		KRoomMaxWidth, KRoomMaxHeight, 
 		KRetryCount );
